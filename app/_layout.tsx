@@ -1,5 +1,7 @@
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import { Text } from "react-native";
 
 export default function RootLayout() {
   const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -20,12 +22,28 @@ export default function RootLayout() {
   });
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <ClerkProvider publishableKey={publishableKey}>
+      <SignedIn>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </SignedIn>
+      <SignedOut>
+        <Text
+          style={{
+            fontFamily: "grotesque-regular",
+            fontSize: 20,
+            textAlign: "center",
+            marginTop: 20,
+          }}
+        >
+          Signed Out
+        </Text>
+      </SignedOut>
+    </ClerkProvider>
   );
 }
